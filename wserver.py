@@ -507,7 +507,7 @@ section span{
 """
 
 
-@routes.get('/slam/files/{hash_id}')
+@routes.get('/gawrmirrorbot/files/{hash_id}')
 async def list_torrent_contents(request):
 
     torr = request.match_info["hash_id"]
@@ -515,7 +515,7 @@ async def list_torrent_contents(request):
     gets = request.query
 
     if "pin_code" not in gets.keys():
-        rend_page = code_page.replace("{form_url}", f"/slam/files/{torr}")
+        rend_page = code_page.replace("{form_url}", f"/gawrmirrorbot/files/{torr}")
         return web.Response(text=rend_page, content_type='text/html')
 
     client = qba.Client(host="localhost", port="8090",
@@ -546,7 +546,7 @@ async def list_torrent_contents(request):
 
     rend_page = page.replace("{My_content}", cont[0])
     rend_page = rend_page.replace(
-        "{form_url}", f"/slam/files/{torr}?pin_code={pincode}")
+        "{form_url}", f"/gawrmirrorbot/files/{torr}?pin_code={pincode}")
     client.auth_log_out()
     return web.Response(text=rend_page, content_type='text/html')
 
@@ -601,7 +601,7 @@ async def re_verfiy(paused, resumed, client, torr):
     return True
 
 
-@routes.post('/slam/files/{hash_id}')
+@routes.post('/gawrmirrorbot/files/{hash_id}')
 async def set_priority(request):
 
     torr = request.match_info["hash_id"]
@@ -652,7 +652,7 @@ async def set_priority(request):
 @routes.get('/')
 async def homepage(request):
 
-    return web.Response(text="<h1>See Gawr Mirror Bot <a href='https://github.com/SlamDevs/slam-mirrorbot'>@GitHub</a> By <a href='https://github.com/kuro-creator'>Kuro-creator</a></h1>", content_type="text/html")
+    return web.Response(text="<h1>See slam-mirrorbot <a href='https://github.com/SlamDevs/slam-mirrorbot'>@GitHub</a> By <a href='https://github.com/SlamDevs'>SlamDevs</a></h1>", content_type="text/html")
 
 
 async def e404_middleware(app, handler):
@@ -662,11 +662,11 @@ async def e404_middleware(app, handler):
         try:
             response = await handler(request)
             if response.status == 404:
-                return web.Response(text="<h1>404: Page not found</h2><br><h3>Gawr Mirror Bot</h3>", content_type="text/html")
+                return web.Response(text="<h1>404: Page not found</h2><br><h3>slam-mirrorbot</h3>", content_type="text/html")
             return response
         except web.HTTPException as ex:
             if ex.status == 404:
-                return web.Response(text="<h1>404: Page not found</h2><br><h3>Gawr Mirror Bot</h3>", content_type="text/html")
+                return web.Response(text="<h1>404: Page not found</h2><br><h3>slam-mirrorbot</h3>", content_type="text/html")
             raise
     return middleware_handler
 
@@ -685,3 +685,4 @@ async def start_server_async(port=80):
     runner = web.AppRunner(app)
     await runner.setup()
     await web.TCPSite(runner, "0.0.0.0", port).start()
+    
